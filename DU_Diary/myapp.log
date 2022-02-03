@@ -1,0 +1,129 @@
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+admin@cse.du.ac.bd
+12345
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+admin@cse.du.ac.bd
+123456
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '123456'), ('new_pass', '12345'), ('retype_pass', '123')])
+Exception on /dashboard [POST]
+Traceback (most recent call last):
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask_login/utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "/var/www/DU_Diary/DU_Diary/__init__.py", line 208, in dashboard
+    contact_list = con.cursor().execute('select * from user;').fetchall()
+sqlite3.OperationalError: no such table: user
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '123456'), ('new_pass', '12345'), ('retype_pass', '123')])
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '123456'), ('new_pass', '123'), ('retype_pass', '1234')])
+Exception on /dashboard [POST]
+Traceback (most recent call last):
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/var/www/DU_Diary/DU_Diary/venv/lib/python3.6/site-packages/flask_login/utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "/var/www/DU_Diary/DU_Diary/__init__.py", line 208, in dashboard
+    contact_list = cur.execute('select * from contacts where department = ?;', (current_user.department, )).fetchall()
+UnboundLocalError: local variable 'cur' referenced before assignment
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '123456'), ('new_pass', '1234'), ('retype_pass', '123')])
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '123456'), ('new_pass', '1234'), ('retype_pass', '123')])
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '123456'), ('new_pass', '1234'), ('retype_pass', '123')])
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '123456'), ('new_pass', '12345'), ('retype_pass', '12345')])
+admin@cse.du.ac.bd
+12345
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+admin@cse.du.ac.bd
+12345
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '123'), ('new_pass', '123456'), ('retype_pass', '123456')])
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('cur_pass', '12345'), ('new_pass', '123456'), ('retype_pass', '123456')])
+admin@cse.du.ac.bd
+123456
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+admin@cse.du.ac.bd
+123456
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+admin@cse.du.ac.bd
+123456
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+admin@cse.du.ac.bd
+123456
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+admin@cse.du.ac.bd
+123456
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+admin@cse.du.ac.bd
+123456
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('update', '2106,Mr. Md. Ashraful Islam,Lecturer,01518320602,ashraful@du.ac.bd')])
+2106,Mr. Md. Ashraful Islam,Lecturer,01518320602,ashraful@du.ac.bd
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('update', '2106,Mr. Md. Ashraful Islam,Lecturer,Not Found,ashraful@du.ac.bd')])
+2106,Mr. Md. Ashraful Islam,Lecturer,Not Found,ashraful@du.ac.bd
+waiting for dashboard...Entry point of function
+admin@cse.du.ac.bd
+123456
+<Email admin@cse.du.ac.bd, Department Department of Computer Science and Engineering>
+logged in successfully!
+waiting for dashboard...Entry point of function
+waiting for dashboard...Entry point of function
+ImmutableMultiDict([('update', '2106,Mr. Md. Ashraful Islam,Lecturer,01518320602,ashraful@du.ac.bd')])
+2106,Mr. Md. Ashraful Islam,Lecturer,01518320602,ashraful@du.ac.bd
+waiting for dashboard...Entry point of function

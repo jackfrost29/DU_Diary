@@ -1,0 +1,31 @@
+<!doctype html>
+
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+</head>
+
+<body>
+    
+    <div class="login-form-header">DU Diary | Log In</div>
+    
+    {% with messages = get_flashed_messages() %}
+        <ul style="color:#FF0000";>
+            {% for message in messages %}
+                {% if message %}
+                    <li>{{ message }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endwith %}
+    <br>
+
+    <form class="loginform" method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.email(class="loginform-reg_no") }} <br>
+        {{ form.password(class="loginform-password") }} <br>
+        <br>
+        <input class="submit-button" type="submit" value="Log In">
+
+    </form>
+</body>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<div class="top-bar">
+    <img class="top-bar-logo" src="{{ url_for('static', filename='dashboard_topbar_logo.svg.png') }}">
+    <div class="top-bar-site-title">DU Diary</div>
+    <div class="top-bar-dep-name">{{ department }}</div>
+    <div class="top-bar-menu-option">
+        <button class="drop-button">Options</button>
+        <div class="top-bar-menu-option-container">
+            <button class="add-member-button-itself" type="button" onclick='_onClick("-1")'>Add Member</button>
+            <button class="change-password-button-itself" type="button" onclick="_change_password()">Change Password</button>
+            <button class="logout-button-itself" type="button" onclick='_logout()'>Log out</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="contents">
+    <!-- contains all the row -->
+    {% for contact in contacts %}
+        <!-- insert a straight line not start or end of rows -->
+        {% if loop.index != 1 %}
+        <hr>
+        {% endif %}
+        <!-- insert a row in here -->
+        <div class="contents-row">
+            <div class="content-row-serial">{{ loop.index }}</div>
+            <div class="content-row-name">{{ contact['name'] }}</div>
+            <div class="content-row-designation">{{ contact['designation'] }}</div>
+            <div class="content-row-phone">
+                {% set phones = contact['phone'].split(':') %}
+                {% for phone in phones %}
+                    <div class="content-row-phone-single">{{ phone }}</div>
+                {% endfor %}
+            </div>
+            <div class="content-row-email">
+                {% set emails = contact['email'].split(':') %}
+                {% for email in emails %}
+                    <div class="content-row-email-single">{{ email }}</div>
+                {% endfor %}
+            </div>
+            <button class="content-edit-button" value="{{ contact['_id'] }}" onclick="_onClick(this.value)">Edit</button>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="editing-box">
+    <div class="editing-box-content">
+        <span class="close-button">×</span>
+        <div class="editing-box-name"><div>Name:</div><input type="text" class="edit-box-name-input"></div>
+        <div class="editing-box-desig"><div>Designation:</div><select class="designation-options"></select></div>
+        <div class="editing-box-phone"><div>Phone:</div><div class="editing-box-phone-list"></div></div>
+        <div class="editing-box-email"><div>Email:</div><div class="editing-box-email-list"></div></div>
+        <div class="editing-box-submit-buttons">
+            <button class="edit-box-delete-button">Delete Person</button>
+            <button class="edit-box-save-button">Save Changes</button>
+            <button class="edit-box-close-button">Close</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="change-password">
+    <div class="change-password-content">
+        <span class="change-password-close-button">x</span>
+        <form class="change-password-form" method="POST">
+            <label for="cur_pass">Current Password:</label>
+            <input type="password" id="cur_pass" name="cur_pass"><br>
+            <label for="new_pass">New Password:</label>
+            <input type="password" id="new_pass" name="new_pass"><br>
+            <label for="retype_pass">Retype Password:</label>
+            <input type="password" id="retype_pass" name="retype_pass" onkeyup="_check()"><span id='password-match-message'></span><br>
+            <input type="submit" value="Change Password">
+        </form>
+    </div>
+</div>
+
+
+<button class="delete-phone-email" style="display: none;"><i class="fa fa-trash"></i></button>
+
+
+<script>
+
+    var data = {{ contacts|tojson }};
+
+
+    desig_list = ["Professor & Chairman","Professor","Associate Professor",
+                    "Assistant Professor","Supernumerary Professor",
+                    "Professor Emeritus","Professor & Chairperson","Part-Time Teacher",
+                    "Professor ( LPR )","Lecturer","Honorary Professor",
+                    "Associate Professor & Chairman","Assistant Professor & Chairperson",
+                    "Honorary-Teacher","Professor Emiratus","Professor And Vice Chancellor",
+                    "Not Found","Associate Professor & Chairperson"," CFA",
+                    "Assistant Professor & Chairman","Founder Chairman","Professor & Director",
+                    "Professor and Director","Associate Professor & Director"];
+
+    var select_option = document.querySelector(".designation-options");
+    for(i=0; i<desig_list.length; i++){
+        opt = document.createElement("option");
+        opt.text = desig_list[i];
+        opt.value = desig_list[i];
+        select_option.add(opt);
+    }
+
+    document.querySelector(".close-button").onclick = function(){
+        document.querySelector(".editing-box").style.display = "none";
+    }
+
+    document.querySelector(".edit-box-close-button").onclick = function(){
+        document.querySelector(".editing-box").style.display = "none";
+    }
+
+    document.querySelector(".change-password-close-button").onclick = function(){
+        document.querySelector(".change-password").style.display = "none";
+    }
+
+    document.querySelector(".edit-box-delete-button").onclick = function(){
+        var form = document.createElement("form");
+        form.method = "post";
+        form.action = window.location.href;
+
+        var value = document.createElement("input");
+        value.setAttribute("type", "text");
+        value.setAttribute("name", "delete");// this.value contains the person's associated id; which is necessary for update
+        value.setAttribute("value", this.value);
+        
+        form.appendChild(value);
+        // console.log(value.value);
+        // console.log(form.action);
+
+        var choice = confirm("Are you sure you want to delete the specific entry?");
+        
+        if (choice == true){
+            document.body.append(form);
+            form.submit()
+        }
+
+    }
+    document.querySelector(".edit-box-save-button").onclick = function(){
+        
+        var form = document.createElement("form");
+        form.method = "post";
+        form.action = window.location.href;
+
+        var value = document.createElement("input");
+        value.setAttribute("type", "text");
+        value.setAttribute("name", "update");
+        value.setAttribute("value", get_entry_update_values(this.value));
+        
+        form.appendChild(value);
+        // console.log(value.value);
+        // console.log(form.action);
+
+        // modified
+        var choice = null;
+        if (this.value.localeCompare("-1") == 0){
+            choice = confirm("Are you sure you want to add the new Member?");
+        }
+        else{
+            choice = confirm("Are you sure you want to save the changes?\nAll above modifications will be overriden!\n");
+        }
+        // modified
+        
+        if (choice == true){
+            document.body.append(form);
+            form.submit()
+        }
+    }
+
+    function _check() {
+        if (document.getElementById('new_pass').value ==
+            document.getElementById('retype_pass').value) {
+            document.getElementById('password-match-message').style.color = 'green';
+            document.getElementById('password-match-message').innerHTML = 'matching';
+        } else {
+            document.getElementById('password-match-message').style.color = 'red';
+            document.getElementById('password-match-message').innerHTML = 'not matching';
+        }
+    }
+
+    function _logout(){
+        if(confirm("Are you sure you want to log out?") == true){
+            window.location.href = "{{ url_for('logout') }}";
+        }
+    }
+
+    function _change_password(){
+        document.getElementById("cur_pass").value = "";
+        document.getElementById("new_pass").value = "";
+        document.getElementById("retype_pass").value = "";
+        document.getElementById("password-match-message").innerHTML = '';
+        
+        document.querySelector(".change-password").style.display = "block";
+    }
+
+    function _add_user(){
+
+    }
+
+    function get_entry_update_values(_id){
+        var ret = _id.concat(",", document.querySelector(".edit-box-name-input").value,
+                            ",", document.querySelector(".designation-options").value);
+        
+        var _phones = document.getElementsByClassName("entry-phone-input");
+        var number = "";
+        for (var i=0; i<_phones.length; i++){
+            number = number.concat(_phones[i].value);
+            if(i < _phones.length-1)   number = number.concat(":");
+        }
+
+        var _mails = document.getElementsByClassName("entry-email-input");
+        var tmp_mail = "";
+        for (var i=0; i<_mails.length; i++){
+            tmp_mail = tmp_mail.concat(_mails[i].value);
+            if(i < _mails.length-1)   tmp_mail = tmp_mail.concat(":");
+        }
+
+        ret = ret.concat(",", number, ",", tmp_mail);
+        return ret;
+    }
+
+    function remove_entry_from_list(parent_name, class_name, val){
+        var _tmp = document.getElementsByClassName(class_name);
+        for (var i=0; i<_tmp.length; i++){
+            if(_tmp[i].getAttribute("value") == val){
+                if(confirm("Are you sure you want to remove ".concat(val, " from the list?")) == true){
+                    document.querySelector(parent_name).removeChild(_tmp[i]);
+                }
+                return;
+            }
+        }
+    }
+
+    function get_possible_value(class_name){
+        var x = document.getElementsByClassName(class_name);
+        max = -1;
+        for (var i=0; i<x.length; i++){
+            if(parseInt(x[i].getAttribute("value")) > max){
+                max = parseInt(x[i].getAttribute("value"));
+            }
+        }
+        max = max + 1;
+        return max.toString();
+    }
+
+    function _onClick(val){
+
+        var editing_user_json = null;
+
+        // modified
+        if (val.localeCompare("-1") != 0){
+            for (var i=0; i<data.length; i++){
+                if(data[i]._id.toString() == val){
+                    editing_user_json = data[i];
+                    break;
+                }
+            }
+        }
+        else {
+            editing_user_json = {
+                "_id": -1,
+                "name": "Not Found",
+                "designation": "Not Found",
+                "phone": "Not Found",
+                "email": "Not Found"
+            }
+        }
+        //modified
+
+        // set name of facultyinsert
+        document.querySelector(".edit-box-name-input").value = editing_user_json.name;
+
+        // select designation
+        document.querySelector(".designation-options").value = editing_user_json.designation;
+
+        
+        
+        
+        
+        
+        
+        
+        _btn  = document.querySelector(".delete-phone-email");  // replica of delete entry button
+        // insert phones
+        // but first remove all the existing entries
+        var tmp_phone = document.querySelector(".editing-box-phone-list");
+        while(tmp_phone.firstChild){
+            tmp_phone.removeChild(tmp_phone.lastChild);
+        }
+        phones = editing_user_json.phone.split(":");
+        for (var i=0; i<phones.length; i++){
+            // create input field
+            _in = document.createElement("input");
+            _in.setAttribute("type", "text");
+            _in.setAttribute("value", phones[i]);
+            _in.setAttribute("class", "entry-phone-input");
+            // create delete button
+            _btn_clone = _btn.cloneNode(true);
+            _btn_clone.setAttribute("value", i.toString());
+            _btn_clone.style.display = "block"
+            // functinality for deleting a number
+            _btn_clone.onclick = function(){
+                remove_entry_from_list(".editing-box-phone-list", "phone-entry-holder", this.value);
+            }
+
+            // create the holder
+            _holder = document.createElement("div") // div type
+            _holder.setAttribute("class", "phone-entry-holder") // set class
+            _holder.setAttribute("value", i.toString());   // this is crucial in order to delete the holder from it's parent
+            _holder.appendChild(_in); _holder.appendChild(_btn_clone);
+
+            // append the holder inside parent
+            document.querySelector(".editing-box-phone-list").appendChild(_holder); 
+        }
+
+
+
+
+
+
+
+        // add option: an add button
+        var _add_button_phone = document.createElement('button')
+        _add_button_phone.setAttribute("class", "entry-add-button");
+        _add_button_phone.innerHTML = "+ Add";
+        document.querySelector(".editing-box-phone-list").appendChild(_add_button_phone);
+        _add_button_phone.onclick = function(){
+            _in = document.createElement("input");
+            _in.setAttribute("type", "text");
+            _in.setAttribute("class", "entry-phone-input");
+            // not value, cause it's a new entry
+            // create delete button
+            _btn_clone = _btn.cloneNode(true);
+            _tmp_val = get_possible_value("phone-entry-holder");
+            _btn_clone.setAttribute("value", _tmp_val);    // not here
+            _btn_clone.style.display = "block"
+            // functinality for deleting a number
+            _btn_clone.onclick = function(){
+                remove_entry_from_list(".editing-box-phone-list", "phone-entry-holder", this.value);
+            }
+
+            // create the holder
+            _holder = document.createElement("div") // div type
+            _holder.setAttribute("class", "phone-entry-holder") // set class
+            _holder.setAttribute("value", _tmp_val);   // this is crucial in order to delete the holder from it's parent
+            _holder.appendChild(_in); _holder.appendChild(_btn_clone);
+
+            // append the holder inside parent before last element
+            document.querySelector(".editing-box-phone-list").insertBefore(_holder, 
+                                            document.querySelector(".editing-box-phone-list").lastChild);
+        }
+        
+
+
+
+
+        // insert emails
+        // but first remove all the existing entries
+        var tmp_email = document.querySelector(".editing-box-email-list");
+        while(tmp_email.firstChild){
+            tmp_email.removeChild(tmp_email.lastChild);
+        }
+        emails = editing_user_json.email.split(":");
+        for (var i=0; i<emails.length; i++){
+            // create input field
+            _in = document.createElement("input");
+            _in.setAttribute("type", "text");
+            _in.setAttribute("value", emails[i]);
+            _in.setAttribute("class", "entry-email-input");
+            // create delete button
+            _btn_clone = _btn.cloneNode(true);
+            _btn_clone.setAttribute("value", i.toString());
+            _btn_clone.style.display = "block"
+
+            // functinality for deleting an email
+            _btn_clone.onclick = function(){
+                remove_entry_from_list(".editing-box-email-list", "email-entry-holder", this.value);
+            }
+
+            // create the holder
+            _holder = document.createElement("div") // div type
+            _holder.setAttribute("class", "email-entry-holder") // set class
+            _holder.setAttribute("value", i.toString());   // this is crucial in order to delete the holder from it's parent
+            _holder.appendChild(_in); _holder.appendChild(_btn_clone);
+
+            // append the holder inside parent
+            document.querySelector(".editing-box-email-list").appendChild(_holder);
+        }
+        
+
+
+
+
+
+
+
+        // add option: an add button
+        var _add_button_email = document.createElement('button');
+        _add_button_email.setAttribute("class", "entry-add-button");
+        _add_button_email.innerHTML = "+ Add";
+        document.querySelector(".editing-box-email-list").appendChild(_add_button_email);
+        _add_button_email.onclick = function(){
+            _in = document.createElement("input");
+            _in.setAttribute("type", "text");
+            _in.setAttribute("class", "entry-email-input");
+            // no value, cause it's a new entry
+
+            _btn_clone = _btn.cloneNode(true);
+            _tmp_val = get_possible_value("email-entry-holder");
+            _btn_clone.setAttribute("value", _tmp_val);
+            _btn_clone.style.display = "block";
+
+            // functinality for deleting an email
+            _btn_clone.onclick = function(){
+                remove_entry_from_list(".editing-box-email-list", "email-entry-holder", this.value);
+            }
+
+            // create the holder
+            _holder = document.createElement("div") // div type
+            _holder.setAttribute("class", "email-entry-holder") // set class
+            _holder.setAttribute("value", _tmp_val);   // this is crucial in order to delete the holder from it's parent
+            _holder.appendChild(_in); _holder.appendChild(_btn_clone);
+
+            // append the holder inside parent before last element
+            document.querySelector(".editing-box-email-list").insertBefore(_holder, 
+                                            document.querySelector(".editing-box-email-list").lastChild);
+        }
+        
+
+
+        document.querySelector(".edit-box-delete-button").setAttribute("value", val);   // val equals the person's id
+        document.querySelector(".edit-box-save-button").setAttribute("value", val);     // val equals the person's id
+
+
+
+        // modified
+        if(val.localeCompare("-1") == 0){
+            // it's a new member
+            // from save changes to -> add user
+            document.querySelector(".edit-box-save-button").innerHTML = "Add User";
+            // delete button will not remain visible
+            document.querySelector(".edit-box-delete-button").style.display = "none";
+        }
+        else{
+            // it's a existing member
+            // from add user to -> save changes
+            document.querySelector(".edit-box-save-button").innerHTML = "Save Changes";
+            // delete button will become visible
+            document.querySelector(".edit-box-delete-button").style.display = "block";
+        }
+        // modified
+
+
+
+        // document.getElementById("_id").innerHTML = val;
+        document.querySelector(".editing-box").style.display = "block";
+    }
+
+    var is_pass_changed = "{{ flag }}"
+    if (is_pass_changed == "False"){
+        alert("Password didn't change successfully. You must have entered wrong/mis-matched input.\nPlease try again!");
+    }
+
+</script>

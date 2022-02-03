@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard_style.css') }}">
+</head>
+<h1>Nothing Yet...</h1>
+
+<div class="top-bar">
+    <img class="top-bar-logo" src="{{ url_for('static', filename='dashboard_topbar_logo.svg.png') }}">
+</div>
+
+<form method="post">
+    <input type="submit" name="logout" value="Log out." />
+</form>

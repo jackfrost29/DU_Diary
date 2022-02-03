@@ -1,0 +1,43 @@
+
+.static {
+    position: static;
+    border: 3px solid #73AD21;
+}
+
+.profile-image{
+    border-radius: 50%;
+}
+
+.login-form-header, .transection-form-header{
+    font-size: 40px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-top: 50px;
+}
+
+body{
+    background-color:  #0d83dd;
+    text-align: center;
+    /*
+    color: #555555;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.6em;
+    margin:0;
+    */
+}
+
+.loginform, .transection-form{
+    margin: 0 30%;
+}
+
+.loginform *, .transection-form *{
+    padding: 14px 18px;
+    width: 100%;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+
